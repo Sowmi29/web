@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming WWE Shows</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="animated slideInFromTop">
+    </header>
+    
+    <h2>Upcoming WWE Shows</h2>
+
+    <table class="animated slideInFromBottom" id="eventsTable">
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Time</th>
+            <th>View Matches</th>
+        </tr>
+    </table>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js"></script>
+    <script>
+        // Firebase configuration
+       const firebaseConfig = {
+  apiKey: "AIzaSyCJOE63pECEtMNyOYdDg-eGMehCWKU85Qw",
+  authDomain: "sowmiya-f0ff2.firebaseapp.com",
+  projectId: "sowmiya-f0ff2",
+  storageBucket: "sowmiya-f0ff2.appspot.com",
+  messagingSenderId: "338622893277",
+  appId: "1:338622893277:web:b81b24bced5a713ba09f34",
+  measurementId: "G-P5PR6S9QW2"
+};
+      
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+      
+        // Get a reference to the Firestore database
+        const db = firebase.firestore();
+
+        // Fetch events from Firestore
+        db.collection("events").get().then((querySnapshot) => {
+            const eventsTable = document.getElementById("eventsTable");
+            querySnapshot.forEach((doc) => {
+                const eventData = doc.data();
+                const eventName = eventData.Name;
+                const eventLocation = eventData.Location;
+                const eventTime = eventData.Time;
+
+                // Create a table row for the event
+                const eventRow = `
+                    <tr>
+                        <td>${eventName}</td>
+                        <td>${eventLocation}</td>
+                        <td>${eventTime}</td>
+                        <td><button onclick="toggleMatches('${doc.id}')">View Matches</button></td>
+                    </tr>
+                    <tr class="matches" id="${doc.id}_matches" style="display: none;">
+                        <td colspan="4">
+                            <h3>Matches for ${eventName}</h3>
+                            <ul id="${doc.id}_matchesList">
+                                <!-- Matches will be dynamically populated here -->
+                            </ul>
+                        </td>
+                    </tr>
+                `;
+                eventsTable.innerHTML += eventRow;
+
+                // Fetch matches for the event
+                db.collection("events").doc(doc.id).collection("matches").get().then((matchesSnapshot) => {
+                    const matchesList = document.getElementById(`${doc.id}_matchesList`);
+                    matchesSnapshot.forEach((matchDoc) => {
+                        const matchData = matchDoc.data();
+                        const matchDetails = `<li>${matchData['1']} vs ${matchData['2']}</li>`;
+                        matchesList.innerHTML += matchDetails;
+                    });
+                });
+            });
+        });
+
+        // Function to toggle display of matches for an event
+        function toggleMatches(eventId) {
+            const matchesElement = document.getElementById(`${eventId}_matches`);
+            if (matchesElement.style.display === "none") {
+                matchesElement.style.display = "table-row";
+            } else {
+                matchesElement.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

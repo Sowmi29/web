@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Webpage Layout</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: url('john.jpg');
+            background-size: 70%;
+            background-position: center;
+        }
+        header, footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        nav {
+            background-color: #666;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        footer {
+            margin-top: auto; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>WWE</h1>
+    </header>
+    <nav>
+        <select onchange="window.location.href=this.value;">
+            <option value="#" selected disabled hidden>Shows</option>
+            <option value="#">Past</option>
+            <option value="Upcoming.html">Upcoming</option>
+        </select>
+        <a href="#" style="color: #fff; text-decoration: none; margin-right: 10px;">SUPERSTARS</a>
+        <a href="#" style="color: #fff; text-decoration: none; margin-right: 10px;">TICKETS</a>
+        <a href="#" style="color: #fff; text-decoration: none;">SHOP</a>
+    </nav>
+    
+    <footer>
+        <p>Footer &copy; 2024</p>
+    </footer>
+</body>
+</html>
